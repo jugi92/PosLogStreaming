@@ -1,0 +1,3 @@
+faker
+azure-kusto-ingest
+azure-kusto-data

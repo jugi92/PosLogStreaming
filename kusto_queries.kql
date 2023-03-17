@@ -1,0 +1,50 @@
+// Management Queries:
+.drop table PosLog;
+.create table PosLog (xml:string);
+.alter table PosLog policy streamingingestion enable;
+
+// Total Sale
+PosLog 
+| extend json=parse_xml(xml) 
+| mv-expand line_items = json.POSLog.Transaction.RetailTransaction.LineItem
+| extend sales_price_str = line_items.Sale.RegularSalesUnitPrice
+| extend sales_price = todecimal(sales_price_str)
+| summarize total_sale = sum(sales_price)
+| take 20
+
+// Sales by product
+PosLog 
+| extend json=parse_xml(xml) 
+| mv-expand line_items = json.POSLog.Transaction.RetailTransaction.LineItem
+| extend sales_price_str = line_items.Sale.RegularSalesUnitPrice, product = tostring(line_items.Sale.Description["#text"])
+| extend sales_price = todecimal(sales_price_str)
+| summarize total_sale = sum(sales_price) by product
+| take 20;
+
+// Over Time
+PosLog 
+| extend json=parse_xml(xml) 
+| mv-expand line_items = json.POSLog.Transaction.RetailTransaction.LineItem
+| extend sales_price_str = line_items.Sale.RegularSalesUnitPrice, date_time = todatetime(line_items.DateTime["#text"])
+| extend sales_price = todecimal(sales_price_str)
+| where isnotnull(date_time)
+//| project date_time, sales_price
+| summarize total_sale = sum(sales_price) by bin(date_time, 5m)
+//| sort by date_time asc
+
+
+// Total Sale with time filter
+PosLog 
+| extend json=parse_xml(xml) 
+| mv-expand line_items = json.POSLog.Transaction.RetailTransaction.LineItem
+| extend sales_price_str = line_items.Sale.RegularSalesUnitPrice, date_time = todatetime(line_items.DateTime["#text"])
+| extend sales_price = todecimal(sales_price_str)
+| summarize total_sale = sum(sales_price)
+| take 20
+
+// Total Transaction count
+PosLog 
+| extend json=parse_xml(xml)
+| extend date_time = todatetime(json.POSLog.Transaction.EndDateTime[0]["#text"])
+| where date_time between(_startTime .. _endTime)
+| summarize total_transactions = count()
