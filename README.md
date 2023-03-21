@@ -8,3 +8,7 @@ In a productive scenario it would be recommended to do the conversion from XML t
 
 Example PosLog XML comes from: 
 https://doc.posdata.decathlon.io/poslog/use-cases/retailstore-use-cases/RetailStorePoslogs/7-240-240-20170621133911-101-1966.xml
+
+The queries would show an example dashboard like this one:
+
+![Example Dashboard with KPIs](Example%20Dashboard.png)
