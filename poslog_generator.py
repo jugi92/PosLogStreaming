@@ -3,8 +3,9 @@ from math import ceil
 import random
 import uuid
 from faker import Faker
+import json
 
-product_names = [Faker().sentence(nb_words=3, variable_nb_words=True, ext_word_list=None).replace(" ", "").replace(".", "") for i in range(100)]
+product_names = json.load(open("products.json", "r"))
 
 def generate_product_name():
     return random.choices(product_names, [random.randint(1,20) for _ in range(len(product_names))])
@@ -98,4 +99,4 @@ def generate_poslog():
     """
 
 if __name__ == "__main__":
-    print(get_poslog())
+    print(generate_poslog())
