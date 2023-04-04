@@ -12,3 +12,5 @@ https://doc.posdata.decathlon.io/poslog/use-cases/retailstore-use-cases/RetailSt
 The queries would show an example dashboard like this one:
 
 ![Example Dashboard with KPIs](Example%20Dashboard.png)
+
+The product names were generated with Azure OpenAI GPT4 and should not resemble any real product names.
